@@ -1,0 +1,21 @@
+name: MR75 Keep Alive
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Health
+        run: |
+          curl -fsS --retry 2 --max-time 30 \
+          https://mr75.onrender.com/healthz
+
+      - name: Run Cron Check
+        run: |
+          curl -fsS --retry 2 --max-time 60 \
+          https://mr75.onrender.com/api/cron-check
